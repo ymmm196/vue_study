@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./assets/js/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <!-- {{name}} -->
+    </div>
+    <script>
+        /*
+        * 响应式属性    
+            >能根据数据的修改自动更新视图
+            * 原理
+                * 属性特性
+                * 存储器属性
+        * 属性特性（更深入控制对象的属性）
+            * 修改方式：Object.defineProperty(target,prop,descriptor)
+                * taget: 目标对象
+                * prop: 目标对象的属性
+                * descriptor： 属性特性
+            * 查看属性特性：Object.getOwnpropertyDescriptor(data,prop)
+            * 值属性（有值的属性）
+                * configurable  可配置型    Boolean     控制writable&enumerable的开关
+                * enumerable    可枚举性    Boolean
+                * writable      可写性      Boolean
+                * value         值          Any
+            * 存储器属性（没有值的属性）
+                * configurable
+                * enumerable
+                * get
+                * set
+            
+            * 注意事项：
+                1. 传统方式*创建*的属性，属性特性默认为true
+                2. 通过Object.defineProperty创建的属性，属性特性默认为false
+        */
+        let data = {
+            name: 'syk-ym',
+            age: 23,
+            niubility: true,
+
+        }
+        // var app = new Vue({
+        //     el: '#app',
+        //     data: data
+        // });
+        Object.defineProperty(data, 'name', {
+            writable: true
+        });
+        Object.defineProperty(data, 'niubility', {
+            enumerable: false
+        });
+
+        // // 添加存储器属性
+        // Object.defineProperty(data, 'firstname', {
+        //     get() {
+        //         let arr = this.name.split('-');
+        //         return arr[0]
+        //     },
+        //     set(val) {
+        //         let arr = this.name.split('-');
+        //         arr[0] = val;
+        //         this.name = arr.join('-');
+        //     }
+        // })
+
+        // 
+        let app = document.getElementById('app');
+        app.innerHTML = data.name;
+        Object.defineProperty(data, 'showname', {
+            get() {
+                return this.name;
+            },
+            set(val) {
+                this.name = val;
+                app.innerHTML = val;
+            }
+        })
+        console.log(app);
+    </script>
+</body>
+
+</html>

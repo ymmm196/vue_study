@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /*
+            跨域解决方案
+                * JSONP，创建script标签，通过src进行跨域访问
+        */
+        //定义一个全局函数
+        // window.getData = function (data) {
+        //     console.log(data);
+        // }
+        // let script = document.createElement('script');
+
+        // script.src = "http://localhost:1907/jsonp?callback=getData";
+
+        // document.body.appendChild(script);
+    </script>
+    <script>
+        // * CROS
+
+        let xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = () => {
+            console.log(xhr.responseText);
+        }
+        xhr.open('post', 'http://localhost:1907/jsonp', true);
+
+        xhr.send();
+    </script>
+</body>
+
+</html>

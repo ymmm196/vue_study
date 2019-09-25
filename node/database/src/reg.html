@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>免费注册</title>
+    <link rel="shortcut icon" href="#" />
+    <link rel="stylesheet" href="./assets/bootstrap/css/bootstrap.css">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <h1>免费注册</h1>
+        <div class="form-group mt-5">
+            <label for="username">用户名：</label>
+            <input type="text" id="username" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="password">密码：</label>
+            <input type="password" id="password" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="confirmPassword">确认密码：</label>
+            <input type="password" id="confirmPassword" class="form-control">
+            <span class="help-block" style="display:none">两次输入密码不一致</span>
+        </div>
+        <button class="btn btn-success" id="btnReg">注册</button>
+    </div>
+    <script>
+        let username = document.querySelector('#username');
+        let password = document.querySelector('#password');
+        let confirmPassword = document.querySelector('#confirmPassword');
+        let btnReg = document.querySelector('#btnReg');
+        let helpBlock = confirmPassword.nextElementSibling;
+        let confirmPasswordParent = confirmPassword.parentElement;
+
+        username.onblur = function () {
+            let _username = username.value;
+
+            let xhr = new XMLHttpRequest();
+            xhr.onload = () => {
+                let res = JSON.parse(xhr.responseText);
+                console.log(res);
+                if (res.code === 1) {
+                    username.parentElement.classList.remove('has-error')
+                    username.parentElement.classList.add('has-success')
+                } else if (res.code === 0) {
+                    username.parentElement.classList.remove('has-success')
+                    username.parentElement.classList.add('has-error')
+                }
+            }
+
+            // hard code
+            xhr.open('get', '/users/check?username=' + _username, true);
+            xhr.send()
+        }
+
+        btnReg.onclick = () => {
+            let _username = username.value;
+            let _password = password.value;
+            let _confirmPassword = confirmPassword.value;
+
+            // 判断两次输入密码是否一致
+            if (_password != _confirmPassword) {
+                // alert('两次输入密码不一致')
+                helpBlock.style.display = 'block';
+                confirmPasswordParent.classList.add('has-error')
+            } else {
+                helpBlock.style.display = 'none';
+                confirmPasswordParent.classList.remove('has-error')
+            }
+
+            let xhr = new XMLHttpRequest();
+            xhr.onload = () => {
+                console.log(xhr.responseText)
+            }
+
+            // hard code
+            xhr.open('post', '/users/reg', true);
+
+            // 修改请求
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.send(`username=${_username}&password=${_password}`)
+        }
+    </script>
+</body>
+
+</html>

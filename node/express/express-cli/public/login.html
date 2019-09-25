@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <input type="text" id="user"><br>
+    <input type="text" id="pwd"><br>
+    <button id="login">login</button>
+</body>
+<script src="./javascripts/jquery.js"></script>
+<script>
+    const login = ({
+        username,
+        password
+    }) => {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: 'http://localhost:3000/account/login',
+                type: 'post',
+                data: {
+                    username,
+                    password
+                },
+                success(data) {
+                    resolve(data)
+                },
+                error(err) {
+                    reject(err)
+                }
+            })
+        })
+    };
+    $('#login').click(async () => {
+        let username = $('#user').val();
+        let password = $('#pwd').val();
+        let data = await login({
+            username,
+            password
+        });
+        console.log(data);
+    })
+</script>
+
+</html>

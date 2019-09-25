@@ -1,0 +1,6 @@
+{
+    "PORT": 2999,
+    "DBurl": "mongodb://127.0.0.1:27017",
+    "DBname": "mydatas",
+    "secret": "ym"
+}

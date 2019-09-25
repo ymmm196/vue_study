@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./assets/js/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <p>姓名：{{username}} </p>
+        <p>年龄：{{age}} </p>
+        <!-- <input type="text" v-bind:value="age" v-on:input="changeAge"> -->
+        <input type="text" v-model="age">
+    </div>
+</body>
+<script>
+    /*
+        架构模式
+            * MVC  最经典的架构模式，会互相影响
+                - M：Model 数据
+                - V：View  视图
+                - C： Controller 控制器
+            * 双向数据绑定 MVVM  同过vw控制视图和数据
+                - M：Model 数据
+                - V：View  视图
+                - ViewModel 类似presenter
+
+    */
+    let data = {
+        username: 'sky',
+        age: 23
+    }
+    var app = new Vue({
+        el: '#app',
+        data: data,
+        methods: {
+            changeAge(ev) {
+                data.age = ev.target.value;
+            }
+        }
+    });
+
+    // let txt = document.getElementById('txt');
+    // txt.oninput = function changeAge() {
+    //     // console.log(this.value);
+    //     data.age = this.value;
+    // }
+</script>
+
+</html>

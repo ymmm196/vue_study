@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue的使用</title>
+    <script src="./assets/js/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        {{message}}
+    </div>
+    <div id="app-2">
+        <div v-bind:title="message"></div>
+    </div>
+    <script>
+        /*
+            vue 是一套用于构建用户界面的渐进式框架，核心库只关注图层
+        */
+        var app = new Vue({
+            el: '#app', //跟DOM建立关联，所有东西都是响应式的
+            data: {
+                message: 'Hello Vue!'
+            }
+        })
+        // console.log(app);
+
+        var app2 = new Vue({
+            el: "#app-2",
+            data: {
+                message: '页面加载于 ' + new Date().toLocaleString()
+            }
+        });
+
+        var a = ["1", "2", "3"];
+
+        b = a.map(parseInt);
+        console.log(b);
+
+        var c = ["1", "2", "3", "4", "5", 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+        var d = c.map(parseInt);
+        console.log(d);
+    </script>
+</body>
+
+</html>

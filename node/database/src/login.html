@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./assets/bootstrap/css/bootstrap.css">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <h1>登录</h1>
+        <div class="form-group mt-5">
+            <label for="username">用户名：</label>
+            <input type="text" id="username" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="password">密码：</label>
+            <input type="password" id="password" class="form-control">
+        </div>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" id="mdl"> 7天免登陆
+            </label>
+        </div>
+        <button type="submit" class="btn btn-success" id="btnLogin">登录</button>
+    </div>
+    <script>
+        let username = document.querySelector("#username")
+        let password = document.querySelector("#password")
+        let btnLogin = document.querySelector("#btnLogin")
+        let mdl = document.querySelector("#mdl")
+
+        // 获取本地保存的Token
+        let Authorization = localStorage.getItem('Authorization');
+        if (Authorization) {
+            // 把token发送到后端进行校验
+            let xhr = new XMLHttpRequest();
+            xhr.onload = () => {
+                let res = JSON.parse(xhr.responseText);
+
+                if (res.code === 1) {
+                    location.href = '/index.html';
+                }
+            }
+            xhr.open('get', '/verify', true);
+            // 利用请求头发送token
+            xhr.setRequestHeader('Authorization', Authorization);
+            xhr.send()
+        }
+
+        btnLogin.onclick = () => {
+            let _username = username.value;
+            let _password = password.value;
+
+            let xhr = new XMLHttpRequest();
+            xhr.onload = () => {
+                let res = JSON.parse(xhr.responseText);
+                if (res.code === 1) {
+                    localStorage.setItem('Authorization', res.data);
+                } else if (res.code === 0) {
+                    alert('用户名和密码错误');
+                }
+            }
+            let params = `username=${_username}&password=${_password}`
+            if (mdl.checked) {
+                params += `&mdl=1`
+            }
+            xhr.open('get', `/users/login?${params}`, true);
+            xhr.send()
+        }
+    </script>
+</body>
+
+</html>

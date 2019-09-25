@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./assets/bootstrap/css/bootstrap.css">
+    <script src="./assets/js/vue.js"></script>
+    <style>
+        #app div {
+            width: 300px;
+            height: 150px;
+            border: 1px solid #58ba58;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <ul class="nav nav-pills">
+            <li role="presentation" v-for="(item,idx) in tabs" v-bind:class="{active:idx===currentIdx}"
+                v-on:click="changeTab(idx)"><a href="#">{{item.name}}</a></li>
+            <!-- <li role="presentation"><a href="#">Profile</a></li>
+            <li role="presentation"><a href="#">Messages</a></li> -->
+        </ul>
+        <div v-for="(item,idx) in tabs" v-show="idx === currentIdx">{{item.message}}</div>
+    </div>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                currentIdx: 0,
+                tabs: [{
+                    name: '声明式渲染',
+                    message: '这是声明式渲染'
+                }, {
+                    name: '条件与循环',
+                    message: '这是条件与循环'
+                }, {
+                    name: '处理用户输入',
+                    message: '这是处理用户输入'
+                }]
+            },
+            methods: {
+                changeTab(idx) {
+                    this.currentIdx = idx;
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
