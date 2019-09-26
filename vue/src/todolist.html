@@ -24,7 +24,7 @@
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th>全选</th>
+                    <th><input type="checkbox" v-model="checkAll">全选</th>
                     <th>#</th>
                     <th>代办事项</th>
                     <th>预计完成时间</th>
@@ -33,16 +33,17 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(item,idx) in toDoList">
-                    <td><input type="checkbox"></td>
+                <tr v-for="(item,idx) in toDoList" @click="checkList(idx)">
+                    <td><input type="checkbox" v-model="item.check"></td>
                     <td>{{idx+1}}</td>
                     <td>{{item.content}}</td>
                     <td>{{item.finishTime}}</td>
                     <td>{{item.done?'是':'否'}}</td>
                     <td>
                         <div class="btn-group">
-                            <button type="button" class="btn btn-success" v-on:click="finishList(idx)">完成</button>
-                            <button type="button" class="btn btn-danger" v-on:click="removeList(idx)">删除</button>
+                            <button type="button" class="btn btn-success"
+                                v-on:click.stop.once="finishList(idx)">完成</button>
+                            <button type="button" class="btn btn-danger" v-on:click.stop="removeList(idx)">删除</button>
                         </div>
                     </td>
                 </tr>
@@ -61,13 +62,31 @@
                 id: 1,
                 content: '敲两万行代码',
                 finishTime: "2019 / 11 / 15",
-                done: false
+                done: false,
+                check: false
             }, {
                 id: 2,
                 content: '学会vue.js,react.js,node.js',
                 finishTime: "2019 / 11 / 15",
-                done: false
+                done: false,
+                check: false
             }]
+        },
+        computed: {
+            checkAll: {
+                get() {
+                    // res = true;
+                    // this.toDoList.forEach((item, index) => {
+                    //     if (!item.check) res = false
+                    // });
+                    // return res
+                    return this.toDoList.every(item => item.check);
+                },
+                set(val) {
+                    // console.log(val);
+                    this.toDoList.forEach(item => item.check = val);
+                }
+            }
         },
         methods: {
             addList() {
@@ -75,7 +94,8 @@
                     id: this.toDoList.length + 1,
                     content: this.keyword,
                     done: false,
-                    finishTime: this.date
+                    finishTime: this.date,
+                    check: false
                 };
                 this.toDoList.unshift(list);
                 this.keyword = "";
@@ -89,6 +109,11 @@
             },
             removeList(idx) {
                 this.toDoList.splice(idx, 1);
+            },
+            checkList(idx) {
+                this.toDoList.forEach((item, index) => {
+                    if (idx === index) item.check = !item.check;
+                })
             }
         }
     })

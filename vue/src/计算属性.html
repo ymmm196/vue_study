@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .active {
+            background-color: #58ba58;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="example">
+        <p>{{message}}</p>
+        <p>取反：{{reversedMessage}}</p>
+        <div v-bind:style="{ color: activeColor, fontSize: fontSize + 'px' }">你好啊</div>
+    </div>
+    <div id="demo" v-bind:class="isActive ? 'active':''">{{fullName}}</div>
+    <script src="./assets/js/vue.js"></script>
+    <script>
+        var vm = new Vue({
+            el: '#example',
+            data: {
+                message: 'Hello',
+                activeColor: 'red',
+                fontSize: 30
+            },
+            computed: {
+                // 计算属性的getter
+                reversedMessage: function () {
+                    // this指向vm实例
+                    return this.message.split('').reverse().join('');
+                }
+            }
+        })
+        var vm1 = new Vue({
+            el: '#demo',
+            data: {
+                isActive: false,
+                firstName: 'Foo',
+                lastName: 'Bar',
+                // fullName: 'Foo Bar'
+            },
+            // watch: {
+            //     firstName: function (val) {
+            //         this.firstName = val + ' ' + this.lastName
+            //     },
+            //     lastName: function (val) {
+            //         this.fullName = this.firstName + ' ' + val
+            //     }
+            // }
+            computed: {
+                fullName: function () {
+                    return this.firstName + ' ' + this.lastName
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
