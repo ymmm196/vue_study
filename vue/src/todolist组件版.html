@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ToDoList组件化</title>
+    <link rel="stylesheet" href="./assets/bootstrap/css/bootstrap.css">
+    <script src="./assets/js/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <todolist></todolist>
+    </div>
+    <!-- 最外层组件todolist -->
+    <template name="todolist" id="todolist">
+        <div class="container-fluid">
+            <todoform v-on:additem="addItem"></todoform>
+            <!-- v-on:completeitem="completeItem" v-on:removeitem="removeItem" -->
+            <todocontent v-bind:datalist="datalist">
+            </todocontent>
+        </div>
+    </template>
+    <!-- 表单组件 -->
+    <template name="todoform" id="todoform">
+        <div class="input-group">
+            <input type="text" class="form-control" ref="keyword" v-model="keyword" @keyup.13="add">
+            <div class="input-group-addon" style="padding:2px;">
+                <input type="date" v-model="date" />
+            </div>
+            <span class="input-group-btn">
+                <button class="btn btn-success" type="button" @click="add">添加</button>
+            </span>
+        </div>
+    </template>
+    <!-- todocontent组件 -->
+    <template name="todocontent" id="todocontent">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" v-model="checkAll" />全选</th>
+                    <th>#</th>
+                    <th>待办事项</th>
+                    <th>预计完成事件</th>
+                    <th>是否完成</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr is="todoitem" :key="item.id" v-for="(item,idx) in datalist" @click.native="selectItem(idx)"
+                    :item="item" :idx="idx"></tr>
+            </tbody>
+        </table>
+    </template>
+    <!-- todoitem组件 -->
+    <template name="todoitem" id="todoitem">
+        <tr>
+            <td><input type="checkbox" v-model="item.selected" /></td>
+            <td>{{idx+1}}</td>
+            <td>{{item.content}}</td>
+            <td>{{item.date}}</td>
+            <td>{{item.done ? '是':'否'}}</td>
+            <td>
+                <div class="btn-group btn-group-sm">
+                    <!-- <button class="btn btn-default" type="submit" @click.stop.once="complete(idx)">完成</button>
+                    <button class="btn btn-danger" type="submit" @click.stop="remove(idx)">删除</button> -->
+                    <todobutton class="btn-default" @click.stop.once.native="complete(idx)">完成</todobutton>
+                    <todobutton class="btn-danger" @click.stop.native="remove(idx)">删除</todobutton>
+                </div>
+            </td>
+        </tr>
+    </template>
+    <script>
+        let Bus = new Vue();
+        Vue.component('todobutton', {
+            template: `<button class="btn" type="submit" ><slot/></button>`
+        })
+        Vue.component('todolist', {
+            data: function () {
+                return {
+                    datalist: [{
+                        id: 1,
+                        content: '先定个小目标，赚他5个亿',
+                        done: false,
+                        date: '2019-12-25',
+                        selected: false
+                    }]
+                }
+            },
+            mounted() {
+                // 给总线实例Bus绑定自定义事件
+                Bus.$on('remove', this.removeItem);
+                Bus.$on('complete', this.completeItem);
+                Bus.$on('select', this.selectItem);
+            },
+
+            template: '#todolist',
+            methods: {
+                addItem(data) {
+                    this.datalist.unshift(data);
+                },
+                removeItem(idx) {
+                    this.datalist.splice(idx, 1)
+                },
+                completeItem(idx) {
+                    this.datalist.forEach((item, i) => {
+                        if (i === idx) {
+                            item.done = true;
+                        }
+                    })
+                },
+                selectItem(idx) {
+                    this.datalist.forEach((item, i) => {
+                        if (i === idx)
+                            item.selected = !item.selectItem;
+                    })
+                }
+            },
+            components: {
+                todoform: {
+                    props: ['addItem'],
+                    data() {
+                        return {
+                            keyword: '',
+                            date: ''
+                        }
+                    },
+                    template: '#todoform',
+                    methods: {
+                        add() {
+                            let data = {
+                                id: Date.now(),
+                                content: this.keyword,
+                                done: false,
+                                date: this.date,
+                                selected: false
+                            }
+                            // this.addItem(data);
+                            this.$emit('additem', data);
+                            //    清空并获得焦点
+                            this.keyword = '';
+                            this.$refs.keyword.focus()
+                        }
+                    }
+                },
+                todocontent: {
+                    props: ['datalist'],
+                    data() {
+                        return {}
+                    },
+                    computed: {
+                        checkAll: {
+                            get() {
+                                return this.datalist.every(item => item.selected);
+                            },
+                            set(val) {
+                                // 主动修改：checkAll的值影响所有数据的值
+                                this.datalist.forEach(item => item.selected = val);
+                            }
+                        }
+                    },
+                    methods: {
+                        selectItem(idx) {
+                            Bus.$emit('select', idx)
+                        }
+                    },
+                    template: '#todocontent',
+                    components: {
+                        todoitem: {
+                            props: ['item', 'idx'],
+                            data() {
+                                return {}
+                            },
+                            template: '#todoitem',
+                            methods: {
+                                remove(idx) {
+                                    // this.$parent.$emit('removeitem', idx)
+                                    Bus.$emit('remove', idx)
+                                },
+                                complete(idx) {
+                                    // this.$parent.$emit('completeitem', idx)
+                                    Bus.$emit('complete', idx)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        })
+        var vm = new Vue({
+            el: '#app'
+        });
+    </script>
+</body>
+
+</html>

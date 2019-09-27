@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Key的作用</title>
+    <script src="./assets/js/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <ul>
+            <li v-for="(item,idx) in nameList" v-bind:key="item">
+                <input type="checkbox"> {{idx+1}} - {{item}}
+            </li>
+        </ul>
+        <input type="text" v-model="newName" ref="newName">
+        <button @click="add">添加</button>
+    </div>
+    <script>
+        /*
+            key:
+             > Vue对相同的元素进行展示排序等操作时，遵循“就地复用”原则，因为这样更加高效，性能更好
+             > 但对于依赖子组件状态或临时 DOM 状态 (如：表单输入值、复选框选中等)的列表，会出现操作混乱的问题，
+             > 指定key属性后，意为去掉“就地复用”特性（建议尽可能在使用 v-for 时提供 key）    
+        */
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                message: 'hello',
+                newName: '',
+                nameList: ['111', '222', '333']
+            },
+            methods: {
+                add() {
+                    this.nameList.unshift(this.newName);
+                    this.newName = '';
+                    this.$refs.newName.focus();
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

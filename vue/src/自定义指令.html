@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>自定义指令</title>
+    <script src="./assets/js/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <input type="text" v-model="keyword" v-focus>
+        <p v-ym.a.stop></p>
+    </div>
+    <script>
+        /*
+            自定义指令：
+                * 全局指令
+                    * 格式：Vue.directive(name,option)
+                    * 参数
+                        * name：指令名字，使用格式：v-name
+                        * option
+                            * Object：放钩子函数
+                            * Function：默认为bind和update的钩子函数
+                * 局部指令
+                    格式：directives: {}
+                * 钩子函数（了解）
+                    * bind：初始化时执行（默认）
+                    * inserted：元素插入页面时执行
+                    * update：所在模板更新时执行
+                    * componentUpdated：所在模板完成一次更新周期时调用
+                    * unbind：指令与元素解绑时执行
+                    * 参数
+                        * el    指令所绑定的元素，可以用来直接操作 DOM
+                        * binding   一个对象，包含以下案例中的属性
+                            * name: 指令名 不包括v-
+                            * value：指令的绑定值
+                            * oldValue： 指令绑定的前一个值
+                            * expression：字符串形式的指令表达式
+                            * arg：传给指令的参数
+                            * modifiers：一个包含修饰符的对象
+                        * vnode
+                        * oldVnode
+                            > 仅在update 和 componentUpdated 钩子中可用
+        */
+        //自定义一个全局指令
+        Vue.directive('focus', {
+            //初始化时执行
+            bind: function (el, binding) {
+                // 指令绑定 到元素上时执行bind函数，只执行一次
+                console.log(el);
+                console.log(binding);
+            },
+            //当被绑定的元素插入到DOM中时，只触发一次
+            inserted: function (el, binding) {
+                el.focus();
+            },
+            updated: function () {
+                // 当组件vnode更新的时候执行update，可能触发多次
+            }
+        })
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                keyword: ''
+            },
+            directives: {
+                'ym': {
+                    bind: function (el, binding) {
+                        console.log(binding);
+                    },
+                    inserted: function (el, binding) {
+                        console.log(111);
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

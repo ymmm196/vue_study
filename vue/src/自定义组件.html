@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>自定义组件</title>
+    <script src="./assets/js/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <h4>组件内容</h4>
+        <mycomponent></mycomponent>
+    </div>
+    <!-- <template id="mycp">
+        <div>
+            我今年20岁了
+        </div>
+    </template> -->
+    <script type="text/template" id="mycp">
+        <div>
+                我今年20岁了
+            </div>
+    </script>
+    <script>
+        /*
+            组件的案例：
+                * 全局组件：Vue.component(name,options)
+                    * name:组建名
+                    * options：配置参数
+                        * template：模板（只能有一个根节点）
+        */
+        Vue.component('mycomponent', {
+            data: function () {
+                return {
+
+                }
+            },
+            template: `#mycp`
+        });
+        var vm = new Vue({
+            el: '#app'
+        })
+    </script>
+</body>
+
+</html>
