@@ -23,12 +23,20 @@ Router.post('/reg', async (req, res) => {
         username,
         password
     } = req.body;
-    console.log(req.body);
-    let result = await mongo.create('user', [{
-        username,
-        password,
-        regtime: Date.now()
-    }]);
+    let result;
+    try {
+        await mongo.create('user', [{
+            username,
+            password,
+            regtime: new Date()
+        }]);
+        // console.log(111);
+        result = formatData();
+    } catch (err) {
+        result = formatData({
+            code: 0
+        })
+    }
 
     res.send(result);
 })
@@ -64,7 +72,7 @@ Router.get('/check', async (req, res) => {
     let {
         username
     } = req.query;
-    console.log(req.query);
+    // console.log(req.query);
     let result = await mongo.find('user', {
         username
     });
