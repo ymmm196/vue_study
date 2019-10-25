@@ -20,6 +20,15 @@ module.exports = {
         // publicPath: 打包后index.html代码中文件引用前缀（如：src,href等）
 
     },
+    resolve: {
+        alias: {
+            // 'vue$':'vue/dist/vue.js', //解决Vue单文件组件不能使用template的问题
+            '@': path.resolve('src'),
+            '@@': path.resolve('src/components'),
+            '~': path.resolve('src/pages'),
+        },
+        extensions: ['.js', '.jsx']
+    },
     // 测试服务器
     devServer: {
         // 服务器路径（默认：项目的根目录）
@@ -34,9 +43,9 @@ module.exports = {
             test: /\.jsx?$/,
             use: [{
                 loader: 'babel-loader',
-                options: {
-                    presets: ['@babel/preset-react']
-                }
+                // options: {
+                //     presets: ['@babel/preset-react']
+                // }
             }],
             include: path.join(__dirname, './src')
         }, {
