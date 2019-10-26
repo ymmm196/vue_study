@@ -15,7 +15,6 @@ class App extends React.Component {
     constructor() {
         super();
         this.state = {
-            selected: ['/home'],
             menuList: [{
                 name: 'home',
                 path: '/home',
@@ -39,23 +38,29 @@ class App extends React.Component {
             }]
         }
     }
+    componentDidMount() {
+
+        this.props.history.listen(() => {
+            console.log(this.props.location.pathname);
+        })
+    }
+
     render() {
-        let { menuList, selected } = this.state;
+        let { menuList } = this.state;
         let { history } = this.props;
+        // console.log(selected);
         return (
             <div>
                 <div>
-                    <Menu mode="horizontal" selectedKeys={selected} onSelect={({ key }) => { history.push(key); this.setState({ selected: [key] }) }} >
+                    <Menu mode="horizontal" selectedKeys={[this.props.history.location.pathname]} onSelect={({ key }) => { history.push(key); }} >
                         {
                             menuList.map(item => <Menu.Item key={item.path} style={{ width: '25%' }}>
                                 <Icon type={item.icon} />
                                 {item.text}
                             </Menu.Item>)
                         }
-
                     </Menu>
                 </div>
-
 
                 <Switch>
                     <Route path="/home" component={Home} />

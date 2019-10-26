@@ -31,42 +31,41 @@ class Home extends React.Component {
         let { adv_list, datalist } = this.state
         return (
             <div>
-                <div>
-                    <Carousel  >
-                        {
-                            adv_list.map(item => {
-                                return <div>
-                                    <img src={item.image} style={{ width: '100%', maxHeight: 150 }} alt="" />
-                                </div>
-                            })
-                        }
 
-                    </Carousel>
-                </div>
-                <div>
+                <Carousel  >
                     {
-                        datalist.map(item => {
-                            return <div style={{ marginBottom: 24 }}>
-                                <h4>{item.title}</h4>
-                                <Row type="flex" >
-                                    {
-                                        item.item.map(item => {
-                                            return <Col span={12} onClick={this.goto.bind(this, item.goods_id)}>
-                                                <Card
-                                                    hoverable
-                                                    style={{ width: 200 }}
-                                                    cover={<img alt="example" src={item.goods_image} />}
-                                                >
-                                                    <Card.Meta title={item.goods_name} description={item.goods_price} />
-                                                </Card>
-                                            </Col>
-                                        })
-                                    }
-                                </Row>
+                        adv_list.map(item => {
+                            return <div>
+                                <img src={item.image} style={{ width: '100%', maxHeight: 150 }} alt="" />
                             </div>
                         })
                     }
-                </div>
+
+                </Carousel>
+
+                {
+                    datalist.map(item => {
+                        return <div style={{ marginBottom: 24 }}>
+                            <h4>{item.title}</h4>
+                            <Row type="flex" >
+                                {
+                                    item.item.map(item => {
+                                        return <Col span={12} onClick={this.goto.bind(this, item.goods_id)}>
+                                            <Card
+                                                hoverable
+                                                style={{ width: 200 }}
+                                                cover={<img alt="example" src={item.goods_image} />}
+                                            >
+                                                <Card.Meta title={item.goods_name} description={item.goods_price} />
+                                            </Card>
+                                        </Col>
+                                    })
+                                }
+                            </Row>
+                        </div>
+                    })
+                }
+
 
             </div>
         )

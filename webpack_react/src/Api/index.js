@@ -14,3 +14,7 @@ export async function get(params, config = {}) {
     });
     return data;
 }
+
+export default {
+    get
+}
