@@ -2,6 +2,7 @@ import React from 'react';
 import { HashRouter, BrowserRouter, Route, NavLink, Switch, withRouter, Redirect } from 'react-router-dom';
 import { Menu, Icon } from 'antd';
 import 'antd/dist/antd.css';
+import './App.scss';
 // 引入组件
 import Home from '~/Home';
 import Discover from '~/Discover';

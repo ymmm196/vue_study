@@ -1,3 +1,10 @@
-div {
-  color: #58bc58;
+﻿.price > span {
+  color: #f00;
+  margin-right: 5px;
+}
+.price > span::before {
+  content: "￥";
+}
+.price > del::before {
+  content: "￥";
 }

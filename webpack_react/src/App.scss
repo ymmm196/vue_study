@@ -1,5 +1,14 @@
-$divColor:#58bc58;
+.price {
+    >span {
+        color: #f00;
+        margin-right: 5px;
 
-div {
-    color: $divColor
+        &::before {
+            content: '￥'
+        }
+    }
+
+    >del::before {
+        content: '￥'
+    }
 }
